@@ -38,12 +38,13 @@
 
       // get data
       const TOTAL_DAYS = octopus.getTotalDays();
-      const students = octopus.getAllStudents(); // to be written
+      const students = octopus.getAllStudents();
       const studentNames = Object.keys(students);
       
       // get dom
       this.thead = document.getElementsByTagName('thead')[0];
       const tableHeadRow = document.createElement('tr');
+      this.tbody = document.getElementsByTagName('tbody')[0];
 
       // create and populate table headers
       const tableHeadings = [];
@@ -60,7 +61,26 @@
       });
 
       // create and populate table body rows
+      studentNames.forEach(name => {
+        let tr = document.createElement('tr');
+        let tdName = document.createElement('td');
+        tdName.innerText = name;
+        tr.appendChild(tdName);
 
+        for (let i = 0; i < TOTAL_DAYS; i++) {
+          let td = document.createElement('td');
+          let checkbox = document.createElement('input');
+          checkbox.setAttribute('type', 'checkbox');
+          td.appendChild(checkbox);
+          tr.appendChild(td);
+        }
+
+        let tdMissingDays = document.createElement('td');
+        tdMissingDays.innerText = 0;
+        tr.appendChild(tdMissingDays);
+        
+        this.tbody.appendChild(tr);
+      });  
 
       // update dom
       this.thead.appendChild(tableHeadRow);
