@@ -1,0 +1,12 @@
+data needed:
+ - number od days
+ - list of students
+ - each student has days-length array with true/false values
+ - each student has info about number of missed days
+
+ model: 
+  - init
+  - modifyAttendance
+  - getStudentsList
+  - getStudent
+  - getTotalDays
