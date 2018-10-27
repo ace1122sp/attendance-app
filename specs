@@ -6,13 +6,17 @@ data needed:
 
  model: 
   - init
-  - modifyAttendance
+  - modifyAttendance(studentName, day, val)
   - getStudentsList
   - getStudent
   - getTotalDays
 
 view:
-  - u table body treba student-number rows
-  - u svakom row: name, 12 boxes, total day missed
-  - f-ja za kreiranje reda
-  - iskoristi row f-ju student-number times
+  init:
+    - u table body treba student-number rows
+    - u svakom row: name, 12 boxes, total day missed
+    - f-ja za kreiranje reda
+    - iskoristi row f-ju student-number times
+  render: 
+    - arg: student name, days
+    - find element in dom and update with number

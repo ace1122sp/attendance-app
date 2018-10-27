@@ -26,16 +26,30 @@
       const allStudents = this.getAllStudents();
       return allStudents[studentName];
     },
-    modifyAttendance: function(student, day) {
+    getStudentDaysMissed: function(studentName) {
       const allStudents = this.getAllStudents();
-      allStudents[student][day] = !allStudents[student][day];
+      const totalDays = this.getTotalDays();
+      const dayReducer = (acc, currentDay) => {
+        if (currentDay) return acc - 1;
+        return acc;
+      }
+      const missedDays = allStudents[studentName].reduce(dayReducer, totalDays);
+      
+      return missedDays;
+    },
+    modifyAttendance: function(studentName, day, attendance) {
+      const allStudents = this.getAllStudents();
+      allStudents[studentName][day] = attendance;
+      localStorage.setItem('students', JSON.stringify(allStudents));
     },
 
   };
 
   const view = {
     init: function () {
-
+      
+      // try to refactor this init function 
+      
       // get data
       const TOTAL_DAYS = octopus.getTotalDays();
       const students = octopus.getAllStudents();
@@ -64,26 +78,44 @@
       studentNames.forEach(name => {
         let tr = document.createElement('tr');
         let tdName = document.createElement('td');
+                
         tdName.innerText = name;
         tr.appendChild(tdName);
 
         for (let i = 0; i < TOTAL_DAYS; i++) {
-          let td = document.createElement('td');
+          let td = document.createElement('td');    
           let checkbox = document.createElement('input');
+          
           checkbox.setAttribute('type', 'checkbox');
+          if (students[name][i]) checkbox.setAttribute('checked', '');
+
+          // add event listeners
+          checkbox.addEventListener('change', function () {
+            octopus.modifyAttendance(name, i, this.checked);                        
+          });
+
+          // append to parent element
           td.appendChild(checkbox);
-          tr.appendChild(td);
+          tr.appendChild(td);          
         }
 
         let tdMissingDays = document.createElement('td');
-        tdMissingDays.innerText = 0;
-        tr.appendChild(tdMissingDays);
         
+        tdMissingDays.setAttribute('id', `${name}-days-missed`);
+        tdMissingDays.innerText = octopus.getStudentDaysMissed(name);
+
+        tr.appendChild(tdMissingDays);      
         this.tbody.appendChild(tr);
       });  
 
       // update dom
       this.thead.appendChild(tableHeadRow);
+    },
+    render: function (studentName, totalDaysMissed) {
+      const id = `${studentName}-days-missed`;
+      const td = document.getElementById(id);
+
+      td.innerText = totalDaysMissed;
     }
   };
 
@@ -93,7 +125,14 @@
       view.init();
     },
     getAllStudents: () => model.getAllStudents(),
-    getTotalDays: () => model.getTotalDays()
+    getTotalDays: () => model.getTotalDays(),
+    getStudentDaysMissed: (studentName) => model.getStudentDaysMissed(studentName),
+    modifyAttendance: function (studentName, day, attendance) {
+      model.modifyAttendance(studentName, day, attendance);
+      const daysMissed = this.getStudentDaysMissed(studentName);
+
+      view.render(studentName, daysMissed);
+    }
   };
 
   octopus.init();
