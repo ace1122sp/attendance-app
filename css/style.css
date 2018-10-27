@@ -1,6 +1,7 @@
 body {
     line-height: 1.6;
     margin: 2em;
+    font-family: Helvetica, sans-serif;
 }
 
 th {
@@ -16,19 +17,4 @@ td {
 
 input {
     cursor: pointer;
-}
-
-/* Column types */
-th.missed-col {
-    background-color: #f00;
-}
-
-td.missed-col {
-    background-color: #ffecec;
-    color: #f00;
-    text-align: center;
-}
-
-.name-col {
-    text-align: left;
 }

@@ -8,10 +8,6 @@ const app = express();
 
 app.use(express.static(PUBLIC));
 
-app.get('/shadow', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'shadow.html'));
-})
-
 app.get('/*', (req, res) => {
   res.sendFile(path.resolve('./index.html'));
 });
